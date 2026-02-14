@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: ig_bot
+    restart: always
+    volumes:
+      - ./database:/app/database
+      - ./sessions:/app/sessions
+      - ./logs:/app/logs
+      - ./.env:/app/.env
+    deploy:
+      resources:
+        limits:
+          memory: 512M # Keep it light for $6 VPS
+    command: python run_bot.py
+
+  dashboard:
+    build: .
+    container_name: ig_dashboard
+    restart: always
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./database:/app/database
+      - ./sessions:/app/sessions
+      - ./logs:/app/logs
+      - ./.env:/app/.env
+    command: streamlit run dashboard/app.py

@@ -1,0 +1,9 @@
+instagrapi
+streamlit
+pandas
+groq
+python-dotenv
+pillow
+schedule
+plotly
+watchdog
