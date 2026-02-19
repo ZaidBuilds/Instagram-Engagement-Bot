@@ -30,6 +30,17 @@ class InstagramBot:
         self.daily_comments = 0
         self.daily_follows = 0
         self.daily_unfollows = 0
+        self.last_counter_reset_date = datetime.now().date()
+
+    def _reset_daily_counters_if_needed(self):
+        today = datetime.now().date()
+        if today != self.last_counter_reset_date:
+            self.logger.info("New day detected. Resetting daily action counters.")
+            self.daily_likes = 0
+            self.daily_comments = 0
+            self.daily_follows = 0
+            self.daily_unfollows = 0
+            self.last_counter_reset_date = today
 
     def login(self):
         try:
@@ -108,6 +119,7 @@ class InstagramBot:
 
     def check_limits(self):
         """Check if daily limits are reached"""
+        self._reset_daily_counters_if_needed()
         settings = self.settings
         multiplier = self.get_warmup_multiplier()
         

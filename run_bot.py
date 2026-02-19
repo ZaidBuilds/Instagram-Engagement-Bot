@@ -2,11 +2,15 @@ import threading
 import time
 import schedule
 import sqlite3
-from src.database import get_connection
+from dotenv import load_dotenv
+from src.database import get_connection, init_db
 from src.bot_engine import InstagramBot
 from src.utils import setup_logger, random_sleep
 
 logger = setup_logger("master_runner")
+
+# Load environment variables from .env (if present) before bot startup.
+load_dotenv()
 
 def run_account_cycle(account_data):
     account_id = account_data['id']
@@ -60,6 +64,9 @@ def run_account_cycle(account_data):
 
 def main_loop():
     logger.info("Starting Master Bot Runner...")
+
+    # Ensure database and tables exist before the main polling loop starts.
+    init_db()
     
     active_threads = {}
     
